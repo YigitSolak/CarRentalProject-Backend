@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class Users:IEntity
+    public class Customer:IEntity
     {
         public int UserID { get; set; }
-        public string UserFirstName { get; set; }
-        public string UserLatName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string CompanyName { get; set; }
     }
 }
