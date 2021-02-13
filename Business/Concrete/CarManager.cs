@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -16,10 +18,18 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-
-        public List<Car> GetAll()
+        public IResult Add(Car car)
         {
-            return _carDal.GetAll();
+            if (car.CarName.Length<2)
+            {
+                return new ErrorResult(Messages.NameInvalid);
+            }
+            _carDal.Add(car);
+            return new SuccessResult(Messages.Added);
+        }
+        IDataResult<List<Car>> ICarService.GetAll()
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.Listed);
         }
     }
 }
