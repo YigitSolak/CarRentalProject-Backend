@@ -9,5 +9,6 @@ namespace Entities.Concrete
 {
     public class Rental:IEntity
     {
+        public int RentalId { get; set; }
     }
 }
