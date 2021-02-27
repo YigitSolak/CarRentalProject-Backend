@@ -9,7 +9,8 @@ namespace Entities.Concrete
 {
     public class User:IEntity
     {
-        public int UserID { get; set; }
+        public int UsersId { get; set; }
+        public int UserId { get; set; }
         public string UserFirstName { get; set; }
         public string UserLatName { get; set; }
         public string Email { get; set; }
