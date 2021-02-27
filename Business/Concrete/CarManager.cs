@@ -27,7 +27,14 @@ namespace Business.Concrete
             _carDal.Add(car);
             return new SuccessResult(Messages.Added);
         }
-        IDataResult<List<Car>> ICarService.GetAll()
+
+        public IResult Delete(Car car)
+        {
+            _carDal.Delete(car);
+            return new SuccessResult(Messages.Deleted);
+        }
+
+        public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.Listed);
         }
