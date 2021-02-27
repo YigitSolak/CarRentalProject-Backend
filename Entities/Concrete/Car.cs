@@ -7,7 +7,6 @@ namespace Entities.Concrete
 {
     public class Car : IEntity //Car bir veritabanı tablosudur.
     {
-        public int CarsId { get; set; }
         public int Id { get; set; }
         public int BrandId { get; set; }
         public int ColorId { get; set; }
