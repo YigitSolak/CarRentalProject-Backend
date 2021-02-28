@@ -11,5 +11,7 @@ namespace Business.Abstract
 {
     public interface IRentalService : ICrudBase<Rental>
     {
+        IDataResult<List<Rental>> GetAll();
+        IDataResult<Rental> GetByRentalId(int id);
     }
 }

@@ -18,25 +18,32 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public IResult Add(Car car)
+        public IResult Add(Car entity)
         {
-            if (car.CarName.Length<2)
-            {
-                return new ErrorResult(Messages.NameInvalid);
-            }
-            _carDal.Add(car);
+            _carDal.Add(entity);
             return new SuccessResult(Messages.Added);
         }
 
-        public IResult Delete(Car car)
+        public IResult Delete(Car entity)
         {
-            _carDal.Delete(car);
+            _carDal.Delete(entity);
             return new SuccessResult(Messages.Deleted);
+        }
+
+        public IResult Update(Car entity)
+        {
+            _carDal.Update(entity);
+            return new SuccessResult(Messages.Updated);
         }
 
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.Listed);
+        }
+
+        public IDataResult<Car> GetByCarId(int id)
+        {
+            return new SuccessDataResult<Car>(_carDal.Get(b => b.Id == id), Messages.Listed);
         }
     }
 }

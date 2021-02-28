@@ -1,4 +1,5 @@
 ﻿using Core.DataAccess;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,9 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface IUserService: ICrudBase<User>
+    public interface IUserService : ICrudBase<User>
     {
+        IDataResult<List<User>> GetAll();
+        IDataResult<User> GetByUserId(int id);
     }
 }

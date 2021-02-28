@@ -20,14 +20,22 @@ namespace Business.Concrete
             _colorDal = colorDal;
         }
 
-        public IResult Add(Color color)
+        public IResult Add(Color entity)
         {
-            if (color.ColorName.Length<2)
-            {
-                return new ErrorResult(Messages.NameInvalid);
-            }
-            _colorDal.Add(color);
+            _colorDal.Add(entity);
             return new SuccessResult(Messages.Added);
+        }
+
+        public IResult Delete(Color entity)
+        {
+            _colorDal.Delete(entity);
+            return new SuccessResult(Messages.Deleted);
+        }
+
+        public IResult Update(Color entity)
+        {
+            _colorDal.Update(entity);
+            return new SuccessResult(Messages.Updated);
         }
 
         public IDataResult<List<Color>> GetAll()

@@ -6,10 +6,9 @@ using System.Text;
 
 namespace Business.Abstract
 {
-    public interface ICarService
+    public interface ICarService : ICrudBase<Car>
     {
         IDataResult<List<Car>> GetAll();
-        IResult Add(Car car);
-        IResult Delete(Car car);
+        IDataResult<Car> GetByCarId(int id);
     }
 }

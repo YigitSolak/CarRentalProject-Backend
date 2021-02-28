@@ -14,5 +14,6 @@ namespace Business.Constants
         public static string MaintenanceTime = "Sistem bakımda.";
         public static string Deleted = "Başarıyla silindi.";
         public static string Updated = "Başarıyla güncellendi.";
+        public static string CarImageLimitExceeded = "Araba resim sınırı aşıldı.";
     }
 }

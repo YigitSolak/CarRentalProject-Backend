@@ -20,14 +20,22 @@ namespace Business.Concrete
             _brandDal = brandDal;
         }
 
-        public IResult Add(Brand brand)
+        public IResult Add(Brand entity)
         {
-            if (brand.BrandName.Length<2)
-            {
-                return new ErrorResult(Messages.NameInvalid);
-            }
-            _brandDal.Add(brand);
+            _brandDal.Add(entity);
             return new SuccessResult(Messages.Added);
+        }
+
+        public IResult Delete(Brand entity)
+        {
+            _brandDal.Delete(entity);
+            return new SuccessResult(Messages.Deleted);
+        }
+
+        public IResult Update(Brand entity)
+        {
+            _brandDal.Update(entity);
+            return new SuccessResult(Messages.Updated);
         }
 
         public IDataResult<List<Brand>> GetAll()

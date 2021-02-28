@@ -1,0 +1,56 @@
+﻿using Business.Abstract;
+using Business.Concrete;
+using DataAccess.Concrete.EntityFramework;
+using Entities.Concrete;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace WebAPI.Controllers
+{
+    [Route("api/[controller]")]
+        [ApiController]
+        public class BrandController : ControllerBase
+        {
+            IBrandService _brandService;
+
+            public BrandController(IBrandService productService)
+            {
+                _brandService = productService;
+            }
+
+            [HttpGet("getall")]
+            public IActionResult GetAll()
+            {
+                var result = _brandService.GetAll();
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result);
+            }
+            [HttpPost("add")]
+            public IActionResult Add(Brand entity)
+            {
+                var result = _brandService.Add(entity);
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result);
+            }
+            [HttpPost("delete")]
+            public IActionResult Delete(Brand entity)
+            {
+                var result = _brandService.Delete(entity);
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result);
+            }
+        }
+}
