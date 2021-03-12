@@ -17,9 +17,9 @@ namespace WebAPI.Controllers
         {
             IBrandService _brandService;
 
-            public BrandController(IBrandService productService)
+            public BrandController(IBrandService brandService)
             {
-                _brandService = productService;
+                _brandService = brandService;
             }
 
             [HttpGet("getall")]

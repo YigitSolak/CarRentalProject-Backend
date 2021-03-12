@@ -17,9 +17,9 @@ namespace WebAPI.Controllers
     {
         ICarService _carService;
 
-        public CarController(ICarService productService)
+        public CarController(ICarService carService)
         {
-            _carService = productService;
+            _carService = carService;
         }
 
         [HttpGet("getall")]

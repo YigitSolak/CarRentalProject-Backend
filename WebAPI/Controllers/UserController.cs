@@ -11,9 +11,9 @@ namespace WebAPI.Controllers
     {
         IUserService _userService;
 
-        public UserController(IUserService productService)
+        public UserController(IUserService userService)
         {
-            _userService = productService;
+            _userService = userService;
         }
 
         [HttpGet("getall")]

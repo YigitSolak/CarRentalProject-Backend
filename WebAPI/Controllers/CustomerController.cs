@@ -10,9 +10,9 @@ namespace WebAPI.Controllers
     {
         ICustomerService _customerService;
 
-        public CustomerController(ICustomerService productService)
+        public CustomerController(ICustomerService customerService)
         {
-            _customerService = productService;
+            _customerService = customerService;
         }
 
         [HttpGet("getall")]

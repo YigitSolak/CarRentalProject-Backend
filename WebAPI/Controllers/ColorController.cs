@@ -10,9 +10,9 @@ namespace WebAPI.Controllers
     {
         IColorService _colorService;
 
-        public ColorController(IColorService productService)
+        public ColorController(IColorService colorService)
         {
-            _colorService = productService;
+            _colorService = colorService;
         }
 
         [HttpGet("getall")]

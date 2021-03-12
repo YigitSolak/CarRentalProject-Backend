@@ -10,9 +10,9 @@ namespace WebAPI.Controllers
     {
         IRentalService _rentalService;
 
-        public RentalController(IRentalService productService)
+        public RentalController(IRentalService rentalService)
         {
-            _rentalService = productService;
+            _rentalService = rentalService;
         }
 
         [HttpGet("getall")]
