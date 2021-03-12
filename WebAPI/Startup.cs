@@ -32,6 +32,7 @@ namespace WebAPI
         {
 
             services.AddControllers();
+            services.AddCors();
             //services.AddSingleton<IProductService, ProductManager>();
             //services.AddSingleton<IProductDal, EfProductDal>();
             services.AddSwaggerGen(c =>
@@ -49,6 +50,8 @@ namespace WebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
             }
+
+            app.UseCors(builder=>builder.WithOrigins("http://localhsot:4200").AllowAnyHeader());
 
             app.UseHttpsRedirection();
 

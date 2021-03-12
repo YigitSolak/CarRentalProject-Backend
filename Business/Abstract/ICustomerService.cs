@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface ICustomerService : ICrudBase<Customer>
+    public interface ICustomerService
     {
+        IResult Add(Customer customer);
+        IResult Delete(Customer customer);
         IDataResult<List<Customer>> GetAll();
         IDataResult<Customer> GetByCustomerId(int id);
     }

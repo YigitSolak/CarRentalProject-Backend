@@ -1,6 +1,5 @@
-﻿using Core.DataAccess;
+﻿using Core.Entities.Concrete;
 using Core.Utilities.Results;
-using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +8,12 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface IUserService : ICrudBase<User>
+    public interface IUserService
     {
         IDataResult<List<User>> GetAll();
-        IDataResult<User> GetByUserId(int id);
+        List<OperationClaim> GetClaims(User user);
+        IResult Add(User user);
+        IResult Delete(User user);
+        User GetByMail(string email);
     }
 }
