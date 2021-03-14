@@ -45,5 +45,14 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<Car>(_carDal.Get(b => b.Id == id), Messages.Listed);
         }
+        public IDataResult<List<Car>> GetByBrandId(int brandid)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(b => b.BrandId == brandid), Messages.Listed);
+        }
+
+        public IDataResult<List<Car>> GetByColorId(int id)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
+        }
     }
 }
