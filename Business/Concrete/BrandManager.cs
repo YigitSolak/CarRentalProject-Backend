@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -20,27 +22,37 @@ namespace Business.Concrete
             _brandDal = brandDal;
         }
 
-        public IResult Add(Brand entity)
+        [ValidationAspect(typeof(BrandValidator))]
+        public IResult Add(Brand brand)
         {
-            _brandDal.Add(entity);
+            _brandDal.Add(brand);
             return new SuccessResult(Messages.Added);
         }
 
-        public IResult Delete(Brand entity)
+        [ValidationAspect(typeof(BrandValidator))]
+        public IResult Delete(Brand brand)
         {
-            _brandDal.Delete(entity);
+            _brandDal.Delete(brand);
             return new SuccessResult(Messages.Deleted);
-        }
-
-        public IResult Update(Brand entity)
-        {
-            _brandDal.Update(entity);
-            return new SuccessResult(Messages.Updated);
         }
 
         public IDataResult<List<Brand>> GetAll()
         {
-            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.Listed);
+            var getAll = _brandDal.GetAll();
+            return new SuccessDataResult<List<Brand>>(getAll);
+        }
+
+        public IDataResult<Brand> GetById(int brandId)
+        {
+            var getById = _brandDal.Get(b => b.BrandId == brandId);
+            return new SuccessDataResult<Brand>(getById);
+        }
+
+        [ValidationAspect(typeof(BrandValidator))]
+        public IResult Update(Brand brand)
+        {
+            _brandDal.Update(brand);
+            return new SuccessResult(Messages.Updated);
         }
 
         public IDataResult<Brand> GetByBrandId(int id)

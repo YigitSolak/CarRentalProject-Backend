@@ -25,6 +25,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
         [HttpPost("add")]
         public IActionResult Add(Color entity)
         {
@@ -35,7 +36,8 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpPost("delete")]
+
+        [HttpDelete("delete")]
         public IActionResult Delete(Color entity)
         {
             var result = _colorService.Delete(entity);
@@ -44,6 +46,24 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
+        }
+
+        [HttpPut("update")]
+        public IActionResult Update(Color color)
+        {
+            var result = _colorService.Update(color);
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpGet("getbyıd")]
+        public IActionResult GetById(int id)
+        {
+            var result = _colorService.GetById(id);
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
         }
     }
 }

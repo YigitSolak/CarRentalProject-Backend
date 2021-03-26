@@ -1,19 +1,18 @@
-﻿using Core.DataAccess;
-using Core.Utilities.Results;
+﻿using Core.Utilities.Results;
 using Entities.Concrete;
-using System;
+using Entities.DTOs;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
     public interface IRentalService
     {
         IResult Add(Rental rental);
+        IResult Update(Rental rental);
         IResult Delete(Rental rental);
         IDataResult<List<Rental>> GetAll();
         IDataResult<Rental> GetByRentalId(int id);
+        IDataResult<List<RentDetailDto>> GetRentDetails();
+        IDataResult<List<Rental>> GetRentalByCarId(int carId);
     }
 }

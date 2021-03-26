@@ -23,9 +23,36 @@ namespace Business.Concrete
         {
             _userDal = userDal;
         }
-        public List<OperationClaim> GetClaims(User user)
+
+        [ValidationAspect(typeof(UserValidator))]
+        public IResult Add(User user)
         {
-            return _userDal.GetClaims(user);
+            _userDal.Add(user);
+            return new SuccessResult(Messages.Added);
+        }
+
+        public IResult Delete(User user)
+        {
+            _userDal.Delete(user);
+            return new SuccessResult(Messages.Deleted);
+        }
+
+        public IResult Update(User user)
+        {
+            _userDal.Update(user);
+            return new SuccessResult(Messages.Updated);
+        }
+
+        public IDataResult<List<OperationClaim>> GetClaims(User user)
+        {
+            var getClaims = _userDal.GetClaims(user);
+            return new SuccessDataResult<List<OperationClaim>>(getClaims);
+        }
+
+        public IDataResult<User> GetById(int userId)
+        {
+            var getById = _userDal.Get(u => u.Id == userId);
+            return new SuccessDataResult<User>(getById);
         }
 
         [CacheAspect]
@@ -36,34 +63,6 @@ namespace Business.Concrete
             //    return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             //}
             return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.Listed);
-        }
-
-        [SecuredOperation("product.add,admin")]
-        [ValidationAspect(typeof(UserValidator))]
-        [CacheRemoveAspect("IProductService.Get")]
-        public IResult Add(User user)
-        {
-            IResult result = BusinessRules.Run();
-            if (result != null)
-            {
-                return result;
-            }
-            _userDal.Add(user);
-            return new SuccessResult(Messages.Added);
-        }
-
-        [SecuredOperation("product.add,admin")]
-        [ValidationAspect(typeof(UserValidator))]
-        [CacheRemoveAspect("IProductService.Get")]
-        public IResult Delete(User user)
-        {
-            IResult result = BusinessRules.Run();
-            if (result != null)
-            {
-                return result;
-            }
-            _userDal.Delete(user);
-            return new SuccessResult(Messages.Deleted);
         }
 
         public User GetByMail(string email)

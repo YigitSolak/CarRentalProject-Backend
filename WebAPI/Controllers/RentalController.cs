@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpPost("delete")]
+        [HttpDelete("delete")]
         public IActionResult Delete(Rental entity)
         {
             var result = _rentalService.Delete(entity);
@@ -44,6 +44,33 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
+        }
+
+        [HttpPut("update")]
+        public IActionResult Update(Rental rental)
+        {
+            var result = _rentalService.Update(rental);
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpGet("getbyrentalıd")]
+        public IActionResult GetById(int id)
+        {
+            var result = _rentalService.GetByRentalId(id);
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpGet("getrentalbycarıd")]
+        public IActionResult GetRentalByCarId(int carId)
+        {
+            var result = _rentalService.GetRentalByCarId(carId);
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
         }
     }
 }

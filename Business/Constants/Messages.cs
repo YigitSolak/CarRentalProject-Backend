@@ -24,5 +24,7 @@ namespace Business.Constants
         public static string SuccessfulLogin = "Başarılı giriş.";
         public static string UserAlreadyExists = "Kullanıcı zaten var.";
         public static string AccessTokenCreated = "Erişim bilgisi oluşturuldu.";
+        public static string CarImageNotFound = "Fotoğraf bulunamadı.";
+        public static string CardAlreadyExists = "Kart zaten var.";
     }
 }

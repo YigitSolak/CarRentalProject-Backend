@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpPost("delete")]
+        [HttpDelete("delete")]
         public IActionResult Delete(Customer entity)
         {
             var result = _customerService.Delete(entity);
@@ -44,6 +44,24 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
+        }
+
+        [HttpPut("update")]
+        public IActionResult Update(Customer customer)
+        {
+            var result = _customerService.Update(customer);
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpGet("getbycustomerid")]
+        public IActionResult GetById(int id)
+        {
+            var result = _customerService.GetByCustomerId(id);
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class CarImage:IEntity
+    public class CarImage : IEntity
     {
         public int Id { get; set; }
         public int CarId { get; set; }
         public string ImagePath { get; set; }
         public DateTime Date { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

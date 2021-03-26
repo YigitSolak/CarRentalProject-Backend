@@ -1,6 +1,5 @@
 ﻿using Business.Abstract;
 using Core.Entities.Concrete;
-using Entities.Concrete;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -26,6 +25,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
         [HttpPost("add")]
         public IActionResult Add(User entity)
         {
@@ -36,7 +36,8 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpPost("delete")]
+
+        [HttpDelete("delete")]
         public IActionResult Delete(User entity)
         {
             var result = _userService.Delete(entity);
@@ -45,6 +46,26 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
+        }
+
+        [HttpPut("update")]
+        public IActionResult Update(User user)
+        {
+            var result = _userService.Update(user);
+
+            if (!result.Success)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+
+        [HttpGet("getbyıd")]
+        public IActionResult GetById(int id)
+        {
+            var result = _userService.GetById(id);
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
         }
     }
 }

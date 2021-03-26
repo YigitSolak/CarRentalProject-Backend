@@ -1,10 +1,16 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspect.Autofac;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Business.Concrete
@@ -18,24 +24,34 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public IResult Add(Car entity)
+        [SecuredOperation("car.add,admin")]
+        [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
+        public IResult Add(Car car)
         {
-            _carDal.Add(entity);
+            _carDal.Add(car);
             return new SuccessResult(Messages.Added);
         }
 
-        public IResult Delete(Car entity)
+        [SecuredOperation("car.update,admin")]
+        [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
+        public IResult Update(Car car)
         {
-            _carDal.Delete(entity);
-            return new SuccessResult(Messages.Deleted);
-        }
-
-        public IResult Update(Car entity)
-        {
-            _carDal.Update(entity);
+            _carDal.Update(car);
             return new SuccessResult(Messages.Updated);
         }
 
+        [SecuredOperation("car.delete,admin")]
+        [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
+        public IResult Delete(Car car)
+        {
+            _carDal.Delete(car);
+            return new SuccessResult(Messages.Deleted);
+        }
+
+        [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.Listed);
@@ -45,6 +61,8 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<Car>(_carDal.Get(b => b.Id == id), Messages.Listed);
         }
+
+        [CacheAspect]
         public IDataResult<List<Car>> GetByBrandId(int brandid)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(b => b.BrandId == brandid), Messages.Listed);
@@ -53,6 +71,17 @@ namespace Business.Concrete
         public IDataResult<List<Car>> GetByColorId(int id)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarDetailByCarId(int carId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails().Where(cr => cr.CarId == carId).ToList());
+        }
+
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
         }
     }
 }
