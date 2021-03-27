@@ -6,6 +6,7 @@ using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
 using Core.Utilities.Security.JWT;
+using Entities.Concrete;
 using Entities.DTOs;
 
 namespace Business.Concrete
@@ -14,11 +15,13 @@ namespace Business.Concrete
     {
         private readonly IUserService _userService;
         private readonly ITokenHelper _tokenHelper;
+        private readonly ICustomerService _customerService;
 
-        public AuthManager(IUserService userService, ITokenHelper tokenHelper)
+        public AuthManager(IUserService userService, ITokenHelper tokenHelper, ICustomerService customerService)
         {
             _userService = userService;
             _tokenHelper = tokenHelper;
+            _customerService = customerService;
         }
 
         [ValidationAspect(typeof(UserRegisterValidator))]
@@ -49,17 +52,49 @@ namespace Business.Concrete
                 return new ErrorDataResult<User>(Messages.UserNotFound);
             }
 
-            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.Data.PasswordHash, userToCheck.Data.PasswordSalt))
+            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
             {
                 return new ErrorDataResult<User>(Messages.PasswordError);
             }
 
-            return new SuccessDataResult<User>(userToCheck.Data, Messages.SuccessfulLogin);
+            return new SuccessDataResult<User>(userToCheck, Messages.SuccessfulLogin);
+        }
+
+        [ValidationAspect(typeof(CustomerUpdateValidator))]
+        public IDataResult<UserForUpdateDto> Update(UserForUpdateDto userForUpdate)
+        {
+            var currentUser = _userService.GetById(userForUpdate.Id);
+
+            var user = new User
+            {
+                Id = userForUpdate.UserId,
+                Email = userForUpdate.Email,
+                FirstName = userForUpdate.FirstName,
+                LastName = userForUpdate.LastName,
+                PasswordHash = currentUser.Data.PasswordHash,
+                PasswordSalt = currentUser.Data.PasswordSalt
+            };
+            byte[] passwordHash, passwordSalt;
+            if (userForUpdate.Password != "")
+            {
+                HashingHelper.CreatePasswordHash(userForUpdate.Password, out passwordHash, out passwordSalt);
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+            }
+            _userService.Update(user);
+            var customer = new Customer
+            {
+                CustomerId = userForUpdate.Id,
+                UserId = userForUpdate.UserId,
+                CompanyName = userForUpdate.CompanyName
+            };
+            _customerService.Update(customer);
+            return new SuccessDataResult<UserForUpdateDto>(userForUpdate, Messages.Updated);
         }
 
         public IResult UserExists(string email)
         {
-            if (_userService.GetByMail(email).Data != null)
+            if (_userService.GetByMail(email) != null)
             {
                 return new ErrorResult(Messages.UserAlreadyExists);
             }

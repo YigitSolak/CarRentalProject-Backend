@@ -2,8 +2,10 @@
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DataAccess.Concrete.EntityFramework
 {
@@ -19,6 +21,7 @@ namespace DataAccess.Concrete.EntityFramework
                              select new CustomerDetailDto
                              {
                                  Id = c.CustomerId,
+                                 UserId = c.UserId,
                                  FirstName = u.FirstName,
                                  LastName = u.LastName,
                                  Email = u.Email,
@@ -26,6 +29,26 @@ namespace DataAccess.Concrete.EntityFramework
                              };
 
                 return result.ToList();
+            }
+        }
+
+        public CustomerDetailDto GetByEmail(Expression<Func<CustomerDetailDto, bool>> filter)
+        {
+            using (var context = new CarRentalContext())
+            {
+                var result = from c in context.Customers
+                             join u in context.Users
+                             on c.UserId equals u.Id
+                             select new CustomerDetailDto
+                             {
+                                 Id = c.CustomerId,
+                                 UserId = c.UserId,
+                                 FirstName = u.FirstName,
+                                 LastName = u.LastName,
+                                 Email = u.Email,
+                                 CompanyName = c.CompanyName
+                             };
+                return result.SingleOrDefault(filter);
             }
         }
     }

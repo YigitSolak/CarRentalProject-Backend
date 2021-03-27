@@ -8,7 +8,7 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CardsController : ControllerBase
     {
-        private readonly ICardService _cardService;
+        private ICardService _cardService;
 
         public CardsController(ICardService cardService)
         {
