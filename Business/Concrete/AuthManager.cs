@@ -67,7 +67,7 @@ namespace Business.Concrete
 
             var user = new User
             {
-                Id = userForUpdate.UserId,
+                UserId = userForUpdate.UserId,
                 Email = userForUpdate.Email,
                 FirstName = userForUpdate.FirstName,
                 LastName = userForUpdate.LastName,

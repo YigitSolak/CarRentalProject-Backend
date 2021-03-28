@@ -51,7 +51,7 @@ namespace Business.Concrete
 
         public IDataResult<User> GetById(int userId)
         {
-            var getById = _userDal.Get(u => u.Id == userId);
+            var getById = _userDal.Get(u => u.UserId == userId);
             return new SuccessDataResult<User>(getById);
         }
 

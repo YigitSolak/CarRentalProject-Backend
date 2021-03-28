@@ -19,11 +19,11 @@ namespace WebAPI.Controllers
         public IActionResult GetAll()
         {
             var result = _carService.GetAll();
-            if (result.Success)
+            if (!result.Success)
             {
-                return Ok(result);
+                return BadRequest(result);
             }
-            return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPost("add")]

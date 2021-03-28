@@ -20,7 +20,10 @@ namespace WebAPI.Controllers
         {
             var result = _brandService.GetAll();
             if (!result.Success)
+            {
                 return BadRequest(result);
+            }
+
             return Ok(result);
         }
 
