@@ -11,44 +11,45 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfCustomerDal : EfEntityRepositoryBase<Customer, CarRentalContext>, ICustomerDal
     {
-        public List<CustomerDetailDto> GetCustomerDetails()
-        {
-            using (var context = new CarRentalContext())
-            {
-                var result = from c in context.Customers
-                             join u in context.Users
-                             on c.UserId equals u.UserId
-                             select new CustomerDetailDto
-                             {
-                                 Id = c.CustomerId,
-                                 UserId = c.UserId,
-                                 FirstName = u.FirstName,
-                                 LastName = u.LastName,
-                                 Email = u.Email,
-                                 CompanyName = c.CompanyName
-                             };
-
-                return result.ToList();
-            }
-        }
-
         public CustomerDetailDto GetByEmail(Expression<Func<CustomerDetailDto, bool>> filter)
         {
             using (var context = new CarRentalContext())
             {
-                var result = from c in context.Customers
-                             join u in context.Users
-                             on c.UserId equals u.UserId
+                var result = from customer in context.Customers
+                             join user in context.Users
+                             on customer.UserId equals user.UserId
                              select new CustomerDetailDto
                              {
-                                 Id = c.CustomerId,
-                                 UserId = c.UserId,
-                                 FirstName = u.FirstName,
-                                 LastName = u.LastName,
-                                 Email = u.Email,
-                                 CompanyName = c.CompanyName
+                                 Id = customer.CustomerId,
+                                 UserId = customer.UserId,
+                                 FirstName = user.FirstName,
+                                 LastName = user.LastName,
+                                 Email = user.Email,
+                                 CompanyName = customer.CompanyName,
                              };
+
                 return result.SingleOrDefault(filter);
+            }
+        }
+
+        public List<CustomerDetailDto> GetCustomerDetails()
+        {
+            using (var context = new CarRentalContext())
+            {
+                var result = from customer in context.Customers
+                             join user in context.Users
+                             on customer.UserId equals user.UserId
+                             select new CustomerDetailDto
+                             {
+                                 Id = customer.CustomerId,
+                                 UserId = customer.UserId,
+                                 FirstName = user.FirstName,
+                                 LastName = user.LastName,
+                                 Email = user.Email,
+                                 CompanyName = customer.CompanyName,
+                             };
+
+                return result.ToList();
             }
         }
     }

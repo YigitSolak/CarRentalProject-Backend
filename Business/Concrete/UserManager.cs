@@ -1,17 +1,12 @@
 ﻿using Business.Abstract;
-using Business.BusinessAspect.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
-using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
@@ -55,19 +50,20 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(getById);
         }
 
-        [CacheAspect]
         public IDataResult<List<User>> GetAll()
         {
-            //if (DateTime.Now.Hour == 23)
-            //{
-            //    return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
-            //}
             return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.Listed);
         }
 
-        public User GetByMail(string email)
+        public IDataResult<User> GetByMail(string email)
         {
-            return _userDal.Get(u => u.Email == email);
+            return new SuccessDataResult<User>(_userDal.Get(u => u.Email == email));
+        }
+
+        public IDataResult<User> GetLastUser()
+        {
+            var lastUser = _userDal.GetAll().LastOrDefault();
+            return new SuccessDataResult<User>(lastUser);
         }
     }
 }

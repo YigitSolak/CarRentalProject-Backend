@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
@@ -41,6 +42,14 @@ namespace Business.Concrete
             };
 
             _userService.Add(user);
+            var lastUser = _userService.GetLastUser();
+
+            var customer = new Customer
+            {
+                UserId = lastUser.Data.UserId,
+                CompanyName = userForRegisterDto.CompanyName
+            };
+
             return new SuccessDataResult<User>(user, Messages.UserRegistered);
         }
 
@@ -52,15 +61,16 @@ namespace Business.Concrete
                 return new ErrorDataResult<User>(Messages.UserNotFound);
             }
 
-            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
+            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.Data.PasswordHash, userToCheck.Data.PasswordSalt))
             {
                 return new ErrorDataResult<User>(Messages.PasswordError);
             }
 
-            return new SuccessDataResult<User>(userToCheck, Messages.SuccessfulLogin);
+            return new SuccessDataResult<User>(userToCheck.Data, Messages.SuccessfulLogin);
         }
 
         [ValidationAspect(typeof(CustomerUpdateValidator))]
+        [TransactionScopeAspect]
         public IDataResult<UserForUpdateDto> Update(UserForUpdateDto userForUpdate)
         {
             var currentUser = _userService.GetById(userForUpdate.Id);
@@ -74,14 +84,18 @@ namespace Business.Concrete
                 PasswordHash = currentUser.Data.PasswordHash,
                 PasswordSalt = currentUser.Data.PasswordSalt
             };
+
             byte[] passwordHash, passwordSalt;
+
             if (userForUpdate.Password != "")
             {
                 HashingHelper.CreatePasswordHash(userForUpdate.Password, out passwordHash, out passwordSalt);
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
             }
+
             _userService.Update(user);
+
             var customer = new Customer
             {
                 CustomerId = userForUpdate.Id,

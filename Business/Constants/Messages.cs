@@ -18,5 +18,6 @@
         public static string AccessTokenCreated = "Erişim bilgisi oluşturuldu.";
         public static string CarImageNotFound = "Fotoğraf bulunamadı.";
         public static string CardAlreadyExists = "Kart zaten var.";
+        public static string CarIsStillRentalled = "Araba zaten kiralanmış.";
     }
 }

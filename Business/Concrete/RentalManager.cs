@@ -7,17 +7,23 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Business.Concrete
 {
     public class RentalManager : IRentalService
     {
         IRentalDal _rentalDal;
+        ICarService _carService;
+        ICustomerService _customerService;
 
-        public RentalManager(IRentalDal rentalDal)
+        public RentalManager(IRentalDal rentalDal, ICarService carService, ICustomerService customerService)
         {
             _rentalDal = rentalDal;
+            _carService = carService;
+            _customerService = customerService;
         }
 
         [ValidationAspect(typeof(RentalValidator))]
@@ -66,6 +72,19 @@ namespace Business.Concrete
         {
             var getRentalByCarId = _rentalDal.GetAll(rental => rental.CarId == carId);
             return new SuccessDataResult<List<Rental>>(getRentalByCarId);
+        }
+
+        private IResult CarRentedCheck(Rental rental)
+        {
+            var rentalledCars = _rentalDal.GetAll(
+                r => r.CarId == rental.CarId && (
+                r.ReturnDate == null ||
+                r.ReturnDate < DateTime.Now)).Any();
+
+            if (rentalledCars)
+                return new ErrorResult(Messages.CarIsStillRentalled);
+
+            return new SuccessResult();
         }
     }
 }

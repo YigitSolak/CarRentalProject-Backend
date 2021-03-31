@@ -1,16 +1,17 @@
-﻿using Entities.Concrete;
+﻿using Entities.DTOs;
 using FluentValidation;
 
 namespace Business.ValidationRules.FluentValidation
 {
-    public class CustomerUpdateValidator : AbstractValidator<Customer>
+    public class CustomerUpdateValidator : AbstractValidator<CustomerDetailDto>
     {
         public CustomerUpdateValidator()
         {
-            RuleFor(p => p.CompanyName).NotEmpty();
-            RuleFor(p => p.CompanyName).MinimumLength(2);
-            RuleFor(p => p.CustomerId).NotEmpty();
+            RuleFor(p => p.Id).NotEmpty();
             RuleFor(p => p.UserId).NotEmpty();
+            RuleFor(p => p.FirstName).NotEmpty();
+            RuleFor(p => p.LastName).NotEmpty();
+            RuleFor(p => p.Email).NotEmpty();
         }
     }
 }

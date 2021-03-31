@@ -11,7 +11,8 @@ namespace Business.Abstract
         IResult Add(User user);
         IResult Update(User user);
         IResult Delete(User user);
-        User GetByMail(string email);
+        IDataResult<User> GetByMail(string email);
         IDataResult<User> GetById(int userId);
+        IDataResult<User> GetLastUser();
     }
 }

@@ -34,11 +34,13 @@ namespace Core.Extensions
             httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             string message = "Internal Server Error";
             IEnumerable<ValidationFailure> errors;
+
             if (e.GetType() == typeof(ValidationException))
             {
                 message = e.Message;
                 errors = ((ValidationException)e).Errors;
                 httpContext.Response.StatusCode = 400;
+
                 return httpContext.Response.WriteAsync(new ValidationErrorDetails
                 {
                     StatusCode = 400,

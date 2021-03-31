@@ -3,6 +3,7 @@ using Business.BusinessAspect.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -33,7 +34,7 @@ namespace Business.Concrete
 
         [SecuredOperation("car.update,admin")]
         [ValidationAspect(typeof(CarValidator))]
-        [CacheRemoveAspect("ICarService.Get")]
+        [TransactionScopeAspect]
         public IResult Update(Car car)
         {
             _carDal.Update(car);
@@ -49,27 +50,27 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Deleted);
         }
 
-        //[CacheAspect]
+        [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
             var getAll = _carDal.GetAll();
             return new SuccessDataResult<List<Car>>(getAll, Messages.Listed);
         }
 
-        public IDataResult<Car> GetByCarId(int id)
+        public IDataResult<CarDetailDto> GetByCarId(int id)
         {
-            return new SuccessDataResult<Car>(_carDal.Get(b => b.Id == id), Messages.Listed);
+            return new SuccessDataResult<CarDetailDto>(_carDal.GetCarDetail(b => b.CarId == id), Messages.Listed);
         }
 
         [CacheAspect]
-        public IDataResult<List<Car>> GetByBrandId(int brandid)
+        public IDataResult<List<CarDetailDto>> GetByBrandId(int brandid)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(b => b.BrandId == brandid), Messages.Listed);
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(b => b.BrandId == brandid), Messages.Listed);
         }
 
-        public IDataResult<List<Car>> GetByColorId(int id)
+        public IDataResult<List<CarDetailDto>> GetByColorId(int id)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.ColorId == id), Messages.Listed);
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetailByCarId(int carId)
