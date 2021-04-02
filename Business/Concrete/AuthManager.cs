@@ -42,13 +42,16 @@ namespace Business.Concrete
             };
 
             _userService.Add(user);
-            var lastUser = _userService.GetLastUser();
+
+            var lastUser = _userService.GetLastUser().Data;
 
             var customer = new Customer
             {
-                UserId = lastUser.Data.UserId,
+                UserId = lastUser.UserId,
                 CompanyName = userForRegisterDto.CompanyName
             };
+
+            _customerService.Add(customer);
 
             return new SuccessDataResult<User>(user, Messages.UserRegistered);
         }
@@ -82,7 +85,8 @@ namespace Business.Concrete
                 FirstName = userForUpdate.FirstName,
                 LastName = userForUpdate.LastName,
                 PasswordHash = currentUser.Data.PasswordHash,
-                PasswordSalt = currentUser.Data.PasswordSalt
+                PasswordSalt = currentUser.Data.PasswordSalt,
+                Status = true
             };
 
             byte[] passwordHash, passwordSalt;
@@ -103,12 +107,13 @@ namespace Business.Concrete
                 CompanyName = userForUpdate.CompanyName
             };
             _customerService.Update(customer);
+
             return new SuccessDataResult<UserForUpdateDto>(userForUpdate, Messages.Updated);
         }
 
         public IResult UserExists(string email)
         {
-            if (_userService.GetByMail(email) != null)
+            if (_userService.GetByMail(email).Data != null)
             {
                 return new ErrorResult(Messages.UserAlreadyExists);
             }
