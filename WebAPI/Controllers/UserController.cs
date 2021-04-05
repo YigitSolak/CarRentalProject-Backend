@@ -67,5 +67,25 @@ namespace WebAPI.Controllers
                 return BadRequest(result);
             return Ok(result);
         }
+
+        [HttpGet("getbymail")]
+        public IActionResult GetByMail(string email)
+        {
+            var result = _userService.GetByMail(email);
+            if (!result.Success)
+                return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpGet("getuserclaims")]
+        public IActionResult GetUserClaims(User user)
+        {
+            var result = _userService.GetClaims(user);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }

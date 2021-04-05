@@ -32,16 +32,17 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Added);
         }
 
-        [SecuredOperation("car.update,admin")]
+        [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarValidator))]
         [TransactionScopeAspect]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
         {
             _carDal.Update(car);
             return new SuccessResult(Messages.Updated);
         }
 
-        [SecuredOperation("car.delete,admin")]
+        [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarValidator))]
         [CacheRemoveAspect("ICarService.Get")]
         public IResult Delete(Car car)

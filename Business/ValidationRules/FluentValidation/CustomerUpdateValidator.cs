@@ -7,8 +7,6 @@ namespace Business.ValidationRules.FluentValidation
     {
         public CustomerUpdateValidator()
         {
-            RuleFor(p => p.Id).NotEmpty();
-            RuleFor(p => p.UserId).NotEmpty();
             RuleFor(p => p.FirstName).NotEmpty();
             RuleFor(p => p.LastName).NotEmpty();
             RuleFor(p => p.Email).NotEmpty();

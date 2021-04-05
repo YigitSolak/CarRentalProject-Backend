@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.Entities.Concrete;
@@ -26,6 +27,7 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(UserRegisterValidator))]
+        [CacheRemoveAspect("IAuthService.Get")]
         public IDataResult<User> Register(UserForRegisterDto userForRegisterDto, string password)
         {
             byte[] passwordHash, passwordSalt;
@@ -45,17 +47,10 @@ namespace Business.Concrete
 
             var lastUser = _userService.GetLastUser().Data;
 
-            var customer = new Customer
-            {
-                UserId = lastUser.UserId,
-                CompanyName = userForRegisterDto.CompanyName
-            };
-
-            _customerService.Add(customer);
-
             return new SuccessDataResult<User>(user, Messages.UserRegistered);
         }
 
+        [CacheRemoveAspect("IAuthService.Get")]
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
         {
             var userToCheck = _userService.GetByMail(userForLoginDto.Email);
@@ -74,6 +69,7 @@ namespace Business.Concrete
 
         [ValidationAspect(typeof(CustomerUpdateValidator))]
         [TransactionScopeAspect]
+        [CacheRemoveAspect("IAuthService.Get")]
         public IDataResult<UserForUpdateDto> Update(UserForUpdateDto userForUpdate)
         {
             var currentUser = _userService.GetById(userForUpdate.Id);
