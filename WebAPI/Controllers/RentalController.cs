@@ -25,6 +25,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
         [HttpGet("getrentaldetail")]
         public IActionResult GetRentalDetail()
         {
@@ -35,6 +36,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+
         [HttpPost("add")]
         public IActionResult Add(Rental entity)
         {
@@ -45,7 +47,8 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpDelete("delete")]
+
+        [HttpPost("delete")]
         public IActionResult Delete(Rental entity)
         {
             var result = _rentalService.Delete(entity);

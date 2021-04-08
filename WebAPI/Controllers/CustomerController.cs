@@ -47,7 +47,8 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-        [HttpDelete("delete")]
+
+        [HttpPost("delete")]
         public IActionResult Delete(Customer entity)
         {
             var result = _customerService.Delete(entity);
